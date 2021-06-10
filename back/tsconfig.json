@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"target": "ESNext",
+		"lib": ["dom", "dom.iterable", "esnext"],
+		"strict": true,
+		"noImplicitAny": true,
+		"module": "esnext",
+		"moduleResolution": "node",
+		"resolveJsonModule": true,
+		"outDir": "./dist",
+		"baseUrl": "src",
+		"paths": {
+			"@utils/*": ["utils/*"]
+		}
+	},
+	"include": ["./src/**/*"],
+}
