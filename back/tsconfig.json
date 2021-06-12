@@ -4,12 +4,14 @@
 		"lib": ["dom", "dom.iterable", "esnext"],
 		"strict": true,
 		"noImplicitAny": true,
-		"module": "esnext",
+		"module": "commonjs",
 		"moduleResolution": "node",
 		"resolveJsonModule": true,
+		"sourceMap": true,
 		"outDir": "./dist",
 		"baseUrl": "src",
 		"paths": {
+			"@routes/*": ["routes/*"],
 			"@utils/*": ["utils/*"]
 		}
 	},
