@@ -1,4 +1,4 @@
-import { createHash } from "crypto";
+import * as Crypto from "crypto";
 import * as KoaRouter from "koa-router";
 import ICustomContext from "@utils/context";
 
@@ -94,7 +94,7 @@ router.post("/", async (context) => {
 
 		// Insert.
 
-		const hashedPassword = createHash("sha256").update(password).digest("hex");
+		const hashedPassword = Crypto.createHash("sha256").update(password).digest("hex");
 
 		await dbClient.query("INSERT INTO users (username, password, email, created_datetime) VALUES ($1, $2, $3, NOW())", [username, hashedPassword, email]);
 		dbClient.release();

@@ -1,6 +1,8 @@
-import { createHash } from "crypto";
+import * as Crypto from "crypto";
 import * as KoaRouter from "koa-router";
+import * as JWT from "jsonwebtoken";
 import ICustomContext from "@utils/context";
+import TokenData from "@utils/token";
 
 const router = new KoaRouter<any, ICustomContext>();
 
@@ -39,9 +41,9 @@ router.post("/", async (context) => {
 
 	try {
 
-		const hashedPassword = createHash("sha256").update(password).digest("hex");
+		const hashedPassword = Crypto.createHash("sha256").update(password).digest("hex");
 
-		const checkResult = await dbClient.query("SELECT * FROM users WHERE username = $1 AND password = $2", [username, hashedPassword]);
+		const checkResult = await dbClient.query("SELECT id FROM users WHERE username = $1 AND password = $2", [username, hashedPassword]);
 
 		if (checkResult.rowCount == 0) {
 
@@ -52,6 +54,8 @@ router.post("/", async (context) => {
 
 		}
 
+		const id = checkResult.rows[0][0];
+
 	}  catch (error) {
 
 		context.response.body = { error: `Something went wrong while creating an account.` };
@@ -61,6 +65,9 @@ router.post("/", async (context) => {
 
 	}
 
+	const token = JWT.sign(<TokenData>{ id: 1 }, process.env.JWTSECRET as string, { algorithm: "HS256", expiresIn: "1d"})
+
+	context.cookies.set("token", token, { domain: "localhost" });
 	context.response.body = {}
 	context.response.status = 200;
 
