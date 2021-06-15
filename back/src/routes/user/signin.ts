@@ -23,7 +23,7 @@ router.post("/", async (context) => {
 
 		context.response.body = { error: "Field 'username' is empty." };
 		context.response.status = 400;
-		return
+		return;
 
 	}
 
@@ -31,13 +31,14 @@ router.post("/", async (context) => {
 
 		context.response.body = { error: "Field 'password' is empty." };
 		context.response.status = 400;
-		return
+		return;
 
 	}
 
 	// Check.
 
 	const dbClient = await context.pg.connect();
+	let userId: number;
 
 	try {
 
@@ -53,8 +54,10 @@ router.post("/", async (context) => {
 			return;
 
 		}
-
-		const id = checkResult.rows[0][0];
+	
+		userId = checkResult.rows[0]["id"];
+		
+		dbClient.release();
 
 	}  catch (error) {
 
@@ -65,7 +68,7 @@ router.post("/", async (context) => {
 
 	}
 
-	const token = JWT.sign(<TokenData>{ id: 1 }, process.env.JWTSECRET as string, { algorithm: "HS256", expiresIn: "1d"})
+	const token = JWT.sign(<TokenData>{ userId: userId }, process.env.JWTSECRET as string, { algorithm: "HS256", expiresIn: "1d"});
 
 	context.cookies.set("token", token, { domain: "localhost" });
 	context.response.body = {}

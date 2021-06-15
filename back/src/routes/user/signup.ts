@@ -22,13 +22,13 @@ router.post("/", async (context) => {
 
 		context.response.body = { error: "Field 'username' is empty." };
 		context.response.status = 400;
-		return
+		return;
 
 	} else if (username.length > 32 || username.length < 4) {
 
 		context.response.body = { error: "Field 'username' should be between 4 to 32 characters long." };
 		context.response.status = 400;
-		return
+		return;
 
 	}
 
@@ -36,13 +36,13 @@ router.post("/", async (context) => {
 
 		context.response.body = { error: "Field 'password' is empty." };
 		context.response.status = 400;
-		return
+		return;
 
 	} else if (password.length > 64 || password.length < 8) {
 
 		context.response.body = { error: "Field 'password' should be between 8 to 64 characters long." };
 		context.response.status = 400;
-		return
+		return;
 
 	}
 
@@ -50,13 +50,13 @@ router.post("/", async (context) => {
 
 		context.response.body = { error: "Field 'email' is empty." };
 		context.response.status = 400;
-		return
+		return;
 
-	} else if (!/^[0-z]+@[a-z]+\.[a-z]+$/.test(email)) {
+	} else if (!/^[0-9a-zA-Z]+@[a-z]+\.[a-z]+$/.test(email)) {
 
 		context.response.body = { error: "Field 'email' has wrong format." };
 		context.response.status = 400;
-		return
+		return;
 
 	}
 
@@ -72,9 +72,9 @@ router.post("/", async (context) => {
 		
 		if (checkUsernameResult.rowCount > 0) {
 
+			dbClient.release();
 			context.response.body = { error: `Username ${username} is already in use.` };
 			context.response.status = 409;
-			dbClient.release();
 			return;
 
 		}
@@ -85,9 +85,9 @@ router.post("/", async (context) => {
 		
 		if (checkEmailResult.rowCount > 0) {
 
+			dbClient.release();
 			context.response.body = { error: `Email ${email} is already in use.` };
 			context.response.status = 409;
-			dbClient.release();
 			return;
 
 		}
@@ -101,9 +101,9 @@ router.post("/", async (context) => {
 
 	} catch (error) {
 
+		dbClient.release();
 		context.response.body = { error: `Something went wrong while creating an account.` };
 		context.response.status = 500;
-		dbClient.release();
 		return;
 
 	}
