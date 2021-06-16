@@ -4,9 +4,15 @@ import * as JWT from "jsonwebtoken";
 import ICustomContext from "@utils/context";
 import TokenData from "@utils/token";
 
+import CommentsRouter from "./comments";
+import PostsRouter from "./posts";
+
 const router = new KoaRouter<any, ICustomContext>();
 
-router.get("/:username", async (context) => {
+router.use("/comments", PostsRouter.routes());
+router.use("/posts", PostsRouter.routes());
+
+router.get("/", async (context) => {
 
 	const { username } = context.params;
 
@@ -44,13 +50,13 @@ router.get("/:username", async (context) => {
 	} catch (err) {
 
 		dbClient.release();
-		context.response.body = { error: `Something went wrong while creating an account.` };
+		context.response.body = { error: `Something went wrong while getting user infomation.` };
 		context.response.status = 500;
 		return;
 
 	}
 
-	context.response.body = { ...user };
+	context.response.body = user;
 	context.response.status = 200;
 
 });
