@@ -1,4 +1,3 @@
-import * as Crypto from "crypto";
 import * as KoaRouter from "koa-router";
 import * as JWT from "jsonwebtoken";
 import ICustomContext from "@utils/context";
@@ -80,7 +79,7 @@ router.post("/", async (context) => {
 		const result = await dbClient.query("SELECT id FROM subreadits WHERE title = $1", [title]);
 		let subreaditId = result.rows[0]["id"];
 
-		await dbClient.query("INSERT INTO subreadit_moderators (user_id, subreadit_id) VALUES ($1, $2)", [userId, subreaditId])
+		await dbClient.query("INSERT INTO subreadit_moderators (user_id, subreadit_id) VALUES ($1, $2)", [userId, subreaditId]);
 		await dbClient.query("COMMIT");
 		dbClient.release();
 
@@ -98,7 +97,7 @@ router.post("/", async (context) => {
 	const token = JWT.sign(<TokenData>{ userId: userId }, process.env.JWTSECRET as string, { algorithm: "HS256", expiresIn: "1d"});
 
 	context.cookies.set("token", token, { domain: "localhost" });
-	context.response.body = {}
+	context.response.body = {};
 	context.response.status = 201;
 
 });

@@ -108,7 +108,7 @@ router.post("/", async (context) => {
 
 	}
 
-	context.response.body = {}
+	context.response.body = {};
 	context.response.status = 201;
 	
 });

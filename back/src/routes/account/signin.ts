@@ -71,7 +71,7 @@ router.post("/", async (context) => {
 	const token = JWT.sign(<TokenData>{ userId: userId }, process.env.JWTSECRET as string, { algorithm: "HS256", expiresIn: "1d"});
 
 	context.cookies.set("token", token, { domain: "localhost" });
-	context.response.body = {}
+	context.response.body = {};
 	context.response.status = 200;
 
 });
